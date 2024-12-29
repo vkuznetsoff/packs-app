@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { baseURL } from 'common/api/common.api';
+import { AddCardResponseType, ArgCreateCardType, CardType, FetchCardsResponseType } from './cards.api.types';
 
 export const cardsApi = createApi({
 	reducerPath: "cardsApi",
@@ -9,7 +10,7 @@ export const cardsApi = createApi({
 	}),
 	endpoints: (build) => {
 		return {
-			getCards: build.query<any, string>({
+			getCards: build.query<FetchCardsResponseType, string>({
 				query: (packId) => {
 					return {
 						method: "GET",
@@ -19,9 +20,22 @@ export const cardsApi = createApi({
 						}
 					}
 				}
+			}),
+
+			addCard: build.mutation<AddCardResponseType,ArgCreateCardType>({
+				query: (card) => {
+					return {
+						method: "POST",
+						url: "cards/card",
+						body: {
+							card
+						}
+
+					}
+				}
 			})
 		}
 	}
 })
 
-export const {useGetCardsQuery} = cardsApi
+export const {useGetCardsQuery, useAddCardMutation} = cardsApi
