@@ -4,8 +4,9 @@ import {
   useAddCardMutation,
   useDeleteCardMutation,
   useGetCardsQuery,
+  useUpdateCardMutation,
 } from "features/cards/service/cards.api";
-import { ArgCreateCardType } from "features/cards/service/cards.api.types";
+import { ArgCreateCardType, CardType } from "features/cards/service/cards.api.types";
 import { ChangeEvent, MouseEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -23,6 +24,8 @@ export const Cards = () => {
   });
 
   const [deleteCard] = useDeleteCardMutation()
+
+  const [updateCard, {data: updatedCards}] = useUpdateCardMutation()
 
   const [addCard, { isLoading: isAddLoading }] = useAddCardMutation();
 
@@ -66,6 +69,12 @@ export const Cards = () => {
     
   }
 
+
+  const updateCardHandler = (card: CardType) => {
+    const newCard = { ...card, question: "💚 new question 💚", answer: "🧡 new answer🧡 " };
+    updateCard(newCard);
+  };
+
   return (
     <div>
       <h1>Cards</h1>
@@ -87,6 +96,7 @@ export const Cards = () => {
                   <p>{card.answer}</p>{" "}
                 </div>
                 <button onClick={() => deleteCardHandler(card._id)}>DELETE</button>
+                <button onClick={() => updateCardHandler(card)}>UPDATE</button>
               </div>
             );
           })}
